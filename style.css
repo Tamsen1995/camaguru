@@ -1,0 +1,48 @@
+    #pageTop {
+        background:url(styles/head.jpg) repeat-x;
+        height: 128px;
+    }
+    #pageTop > #pageTopWrap {
+        width: 1000px;
+        margin: 0px auto;
+        height: 128px;
+    }
+    #pageTop > #pageTopWrap > #pageTopLogo {
+        height: 128px;
+        width: 128px;
+        float: left;
+    }
+    #pageTop > #pageTopWrap > #pageTopRest {
+        height: 110px;
+        width: 870px;
+        float: left;
+    }
+    #pageTop > #pageTopWrap > #pageTopRest > #menu1 {
+        height: 55px;
+    }
+    #pageTop > #pageTopWrap > #pageTopRest > #menu1 > div {
+        height: 25px;
+    }
+    #pageTop > #pageTopWrap > #pageTopRest > #menu1 > div > a {
+        display: block;
+        float: left;
+        color: #CCC;
+        text-decoration: none;
+        margin: 10px  24px;
+    }    
+    #pageTop > #pageTopWrap > #pageTopRest > #menu1 > div > a:hover {
+        color: #834B4B;
+    }
+    #pageTop > #pageTopWrap > #pageTopRest > #menu2 > div > a {
+        color: #CCC;
+        border: #834B4B dashed;
+        margin: 0px 130px;
+        float: right;
+    }    
+
+    #pageMiddle {
+        background-color: #CCC;
+        width: 1000px;
+        margin: 0px auto;
+        height: 900px;
+    }
