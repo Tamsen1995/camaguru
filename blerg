@@ -1,3 +1,3 @@
 git add -A
-git commit -m "first"
+git commit -m "Database connection for the PHP script successful"
 git push origin master
