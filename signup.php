@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <html>
 
     <head>
         <meta charset="UTF-8">
-        <title>Camaguru</title>
+        <title>Signup</title>
         <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="javascript/main.js"></script>
     </head>
     <body>
         <div id ="pageTop">

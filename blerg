@@ -1,3 +1,3 @@
 git add -A
-git commit -m "Creating MySQL tables"
+git commit -m "[ADD] Starting to implement the javascript modules. Going forth with Ajax"
 git push origin master
