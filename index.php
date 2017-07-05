@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Camaguru</title>
         <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="javascript/main.js"></script>
     </head>
     <body>
         <div id ="pageTop">
