@@ -1,3 +1,3 @@
 git add -A
-git commit -m "[UPD] Refusing to advance if the passwords do not match, or when the terms and conditions haven't been viewed yet"
+git commit -m "[UPD] Implemented some php scripts to validate the username"
 git push origin master
