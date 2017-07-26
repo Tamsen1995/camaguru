@@ -40,9 +40,45 @@
 	        }
         }
 
-        
+        function signup() {
+            var u = _("username").value;
+            var p1 = _("pass1").value;
+            var p2 = _("pass2").value;
+            var c = ("country").value;
+            var g = _("gender").value;
+
+            // check username, password (both), email, country, and gender
+            // can't be empty
+            if (u == "" || p1 == "" || p2 == "" || c == "" || g == "") {
+                status.innerHTML = "Fill out the form data";
+            } else if (p1 != p2) {
+                // check if the two passwords are equal to one another or not
+                status.innerHTML = "The passwords you've entered are not identical to one another";
+            } else if (_("terms").style.display == "none") {
+                status.innerHTML = "Please view the terms and conditions";
+            }
 
 
+      
+
+
+            // check to see if the terms have been viewed already, need to check the style.display value for none
+
+            // 
+
+
+        }
+
+
+
+        function openTerms() {
+            _("terms").style.display = "block";
+            emptyElement("status");
+        }
+        function addEvents() {
+            _("elemID").addEventListener("click", func, false);
+        }
+        window.onload = addEvents;
     </script>
 
 
