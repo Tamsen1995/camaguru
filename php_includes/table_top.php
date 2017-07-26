@@ -5,7 +5,7 @@
     <div id="pageTopRest">
         <div id ="menu2">
             <div>
-                <a href="#">Sign up / Log in</a>
+                <a href="signup.php">Sign up / Log in</a>
             </div>
         </div>
         <div id="menu1">
