@@ -1,3 +1,8 @@
+
+<script src="javascript/main.js"></script>
+<script src="javascript/ajax.js"></script>
+<script src="javascript/signup.js"></script>
+
 <?php
     session_start();
     // if the user is already logged in they cannot sign up again
@@ -32,46 +37,57 @@
     }
 ?><?php 
 
+
+if (isset($_POST["u"])) {
+    // connecting to database
+    include_once("php_includes/db_conx.php");
+    // gather the posted data into local variables
+    $u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']); // username sanitized
+    $e = mysqli_real_escape_string($db_conx, $_POST['e']); // email sanitized
+    $p = $_POST['p']; // password
+    $g = preg_replace('#[^a-z0-9]#', '', $_POST['g']); // gender sanitized
+    $c = preg_replace('#[^a-z0-9]#', '', $_POST['c']); // country sanitized
+    // getting the user ip address
+    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR')); // ip address sanitized
+    // duplicate data checks for username and email
+    $sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
+    $query = mysqli_query($db_conx, $sql);
+    $u_check = mysqli_num_rows($query);
+    //---------------------------------------
+    $sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
+    $query = mysqli_query($db_conx, $sql);
+    $e_check = mysqli_num_rows($query);
+    // FORM DATA HANDLING
+    //if any of the fields are empty then echo an error
+    // if username is taken
+    // if email is taken
+    if ($u == "" || $e == "" || $p == "" || $g == "" || $c == "") {
+        echo "Something is missing ! either username, or email, or, password, or country, or gender";
+        exit();
+    } else if ($u_check > 0) {
+        echo "Sorry brah, that username is already taken...brah";
+        exit();
+    } else if ($e_check > 0) {
+        echo "Email is already taken. Do you have an account already ?";
+        exit();
+    } else if (strlen($u) < 3 || strlen($u) > 16) {
+        echo "The username has to be between 3 - 16 characters long... sorry brah";
+        exit();
+    } else if (is_numeric($u[0])) {
+        echo "YOUR USERNAME HAS TO START WITH A LETTER BROOOO ... brah";
+        exit();
+    }
+    // FORM DATA HANDLING END
+    // BEGIN INSERTION OF DATA INTO DATABASE
+
+
+}
+
 /*
 
 // Ajax calls this REGISTRATION code to execute
 if(isset($_POST["u"])){
-	// CONNECT TO THE DATABASE
-	include_once("php_includes/db_conx.php");
-	// GATHER THE POSTED DATA INTO LOCAL VARIABLES
-	$u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
-	$e = mysqli_real_escape_string($db_conx, $_POST['e']);
-	$p = $_POST['p'];
-	$g = preg_replace('#[^a-z]#', '', $_POST['g']);
-	$c = preg_replace('#[^a-z ]#i', '', $_POST['c']);
-	// GET USER IP ADDRESS
-    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
-	// DUPLICATE DATA CHECKS FOR USERNAME AND EMAIL
-	$sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
-    $query = mysqli_query($db_conx, $sql); 
-	$u_check = mysqli_num_rows($query);
-	// -------------------------------------------
-	$sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
-    $query = mysqli_query($db_conx, $sql); 
-	$e_check = mysqli_num_rows($query);
-	// FORM DATA ERROR HANDLING
-	if($u == "" || $e == "" || $p == "" || $g == "" || $c == ""){
-		echo "The form submission is missing values.";
-        exit();
-	} else if ($u_check > 0){ 
-        echo "The username you entered is alreay taken";
-        exit();
-	} else if ($e_check > 0){ 
-        echo "That email address is already in use in the system";
-        exit();
-	} else if (strlen($u) < 3 || strlen($u) > 16) {
-        echo "Username must be between 3 and 16 characters";
-        exit(); 
-    } else if (is_numeric($u[0])) {
-        echo 'Username cannot begin with a number';
-        exit();
-    } else {
-	// END FORM DATA ERROR HANDLING
+
 	    // Begin Insertion of data into the database
 		// Hash the password and apply your own mysterious unique salt
 		$cryptpass = crypt($p);
@@ -113,89 +129,32 @@ if(isset($_POST["u"])){
 <!DOCTYPE HTML>
 <html>
 
-<script src="js/main.js"></script>
-<script src="js/ajax.js"></script>
-
-
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
     
-    <script src="javascript/main.js"></script>
-    <script src="javascript/ajax.js"></script>
-    <script>
+    <style type="text/css">
+    #signupform{
+        margin-top:24px;	
+    }
+    #signupform > div {
+        margin-top: 12px;	
+    }
+    #signupform > input,select {
+        width: 200px;
+        padding: 3px;
+        background: #F3F9DD;
+    }
+    #signupbtn {
+        font-size:18px;
+        padding: 12px;
+    }
+    #terms {
+        border:#CCC 1px solid;
+        background: #F5F5F5;
+        padding: 12px;
+    }
+    </style>
 
-        function restrict(elem) {
-            var tf = _(elem);
-            var rx = new RegExp;
-
-            if (elem == "email") {
-                rx = /[' "]/gi;
-            } else if (elem == "username") {
-                rx = /[^a-z0-9]/gi;
-            }
-            tf.value = tf.value.replace(rx, "");
-        }
-        function delElem(x) {
-            _(x).innerHTML = "";
-        }
-       function validateusername() {
-            var u = _("username").value;
-	        if (u != "") {
-		        _("unamestatus").innerHTML = 'checking ...';
-		        var ajax = ajaxObj("POST", "signup.php");
-                ajax.onreadystatechange = function() {
-	                if(ajaxReturn(ajax) == true) {
-	                    _("unamestatus").innerHTML = ajax.responseText;
-	                }
-                }
-                ajax.send("usernamecheck="+u);
-	        }
-        }
-
-        function signup() {
-            var user = _("username").value;
-            var email = _("email").value;
-            var pass1 = _("pass1").value;
-            var pass2 = _("pass2").value;
-            var country = ("country").value;
-            var sex = _("gender").value;
-
-            // check username, password (both), email, country, and gender
-            // can't be empty
-            if (user == "" || pass1 == "" || pass2 == "" || country == "" || sex == "" || email = "") {
-                status.innerHTML = "Fill out the form data";
-            } else if (p1 != p2) {
-                // check if the two passwords are equal to one another or not
-                status.innerHTML = "The passwords you've entered are not identical to one another";
-            } else if (_("terms").style.display == "none") {
-                status.innerHTML = "Please view the terms and conditions";
-            } else {
-                _("signupbtn").style.display = "none";
-                status.innerHTML = "Please wait ...";
-                var ajax = ajaxObj("POST", signup.php);
-                ajax.onreadystatechange = function() {
-                        if (ajaxReturn(ajax) == true) {
-                            if (ajax.responseText != "signup_success") {
-                                status.innerHTML = ajax.responseText;
-                                _("signupbtn").style.display = "block";
-                            } else {
-                                window.scrollTo(0, 0);
-                                _("signupform").innerHTML = "OK "+user+ "check your email inbox and junk mail box at <u>"+email+"</u> in a moment to complete the sign up process by activating your account. You will not be able to do anything on the site until you successfully activate your account.";
-                            }
-                        }
-                }
-                ajax.send("u="+user+"&e="+email+"&p="+pass1+"&c="+country+"&g="+sex);
-            }
-        }
-        function openTerms() {
-            _("terms").style.display = "block";
-            delElem("status");
-        }
-        function addEvents() {
-            _("elemID").addEventListener("click", func, false);
-        }
-        window.onload = addEvents;
-    </script>
 
 
 </head>
@@ -204,7 +163,6 @@ if(isset($_POST["u"])){
     <div id ="pageTop">
         <?php include_once("php_includes/table_top.php"); ?>
     </div>
-
 
     <div id="pageMiddle">
         <form name="signupform" id="signupform" onsubmit="return false;">
@@ -229,7 +187,7 @@ if(isset($_POST["u"])){
             </select>
             <div>
             <a href="#" onclick="return false" onmousedown="openTerms()">
-                View the Terms Of Use
+                Fuck the Terms Of Use
             </a>
             </div>
             <div id="terms" style="display:none;">
