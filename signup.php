@@ -1,7 +1,77 @@
 
 <script src="javascript/main.js"></script>
 <script src="javascript/ajax.js"></script>
-<script src="javascript/signup.js"></script>
+<script> 
+
+function restrict(elem) {
+    var tf = _(elem);
+    var rx = new RegExp;
+    if (elem == "email") {
+        rx = /[' "]/gi;
+    } else if (elem == "username") {
+        rx = /[^a-z0-9]/gi;
+    }
+    tf.value = tf.value.replace(rx, "");
+}
+function delElem(x) {
+    _(x).innerHTML = "";
+}
+function validateusername() {
+    var u = _("username").value;
+    if (u != "") {
+        _("unamestatus").innerHTML = 'checking ...';
+        var ajax = ajaxObj("POST", "signup.php");
+        ajax.onreadystatechange = function() {
+            if(ajaxReturn(ajax) == true) {
+                _("unamestatus").innerHTML = ajax.responseText;
+            }
+        }
+        ajax.send("usernamecheck="+u);
+    }
+}
+function signup() {
+    var user = _("username").value;
+    var email = _("email").value;
+    var pass1 = _("pass1").value;
+    var pass2 = _("pass2").value;
+    var country = ("country").value;
+    var sex = _("gender").value;
+    // check username, password (both), email, country, and gender
+    // can't be empty
+
+    console.log(gender);
+
+    if (user == "" || pass1 == "" || pass2 == "" || country == "" || sex == "" || email == "") {
+        status.innerHTML = "Fill out the form data";
+    } else if (pass1 != pass2) {
+        // check if the two passwords are equal to one another or not
+        status.innerHTML = "The passwords you've entered are not identical to one another";
+    } else if (_("terms").style.display == "none") {
+        status.innerHTML = "Please view the terms and conditions";
+    } else {
+        _("signupbtn").style.display = "none";
+        status.innerHTML = "Please wait ...";
+        var ajax = ajaxObj("POST", "signup.php");
+        ajax.onreadystatechange = function() {
+                if (ajaxReturn(ajax) == true) {
+                    if (ajax.responseText != "signup_success") {
+                        status.innerHTML = ajax.responseText;
+                        _("signupbtn").style.display = "block";
+                    } else {
+                        window.scrollTo(0, 0);
+                        _("signupform").innerHTML = "OK "+user+ "check your email inbox and junk mail box at <u>"+email+"</u> in a moment to complete the sign up process by activating your account. You will not be able to do anything on the site until you successfully activate your account.";
+                    }
+                }
+        }
+        ajax.send("u="+user+"&e="+email+"&p="+pass1+"&c="+country+"&g="+sex);
+    }
+}
+function openTerms() {
+    _("terms").style.display = "block";
+    delElem("status");
+}
+
+</script>
 
 <?php
     session_start();
@@ -13,6 +83,8 @@
 ?><?php 
     // Ajax calls this NAME CHECK code to execute
     if (isset($_POST["usernamecheck"])) {
+
+
         include_once("php_includes/db_conx.php");
         $username = preg_replace('#[^a-z0-9]#i', '', $_POST['usernamecheck']);
         $sql = "SELECT id FROM users WHERE username='$username' LIMIT 1";
@@ -40,6 +112,10 @@
 
 if (isset($_POST["u"])) {
     // connecting to database
+
+        echo"here?";
+
+
     include_once("php_includes/db_conx.php");
     // gather the posted data into local variables
     $u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']); // username sanitized
@@ -78,9 +154,18 @@ if (isset($_POST["u"])) {
         exit();
     }
     // FORM DATA HANDLING END
-    // BEGIN INSERTION OF DATA INTO DATABASE
-
-
+	// Add user info into the database table for the main site table
+	$sql = "INSERT INTO users (username, email, password, gender, country, ip, signup, lastlogin, notescheck)       
+	        VALUES('$u','$e','$p_hash','$g','$c','$ip',now(),now(),now())";
+	$query = mysqli_query($db_conx, $sql); 
+	$uid = mysqli_insert_id($db_conx);
+	// Establish their row in the useroptions table
+	$sql = "INSERT INTO useroptions (id, username, background) VALUES ('$uid','$u','original')";
+	$query = mysqli_query($db_conx, $sql);
+	// Create directory(folder) to hold each user's files(pics, MP3s, etc.)
+	if (!file_exists("user/$u")) {
+		mkdir("user/$u", 0755);
+	}
 }
 
 /*
@@ -93,18 +178,7 @@ if(isset($_POST["u"])){
 		$cryptpass = crypt($p);
 		include_once ("php_includes/randStrGen.php");
 		$p_hash = randStrGen(20)."$cryptpass".randStrGen(20);
-		// Add user info into the database table for the main site table
-		$sql = "INSERT INTO users (username, email, password, gender, country, ip, signup, lastlogin, notescheck)       
-		        VALUES('$u','$e','$p_hash','$g','$c','$ip',now(),now(),now())";
-		$query = mysqli_query($db_conx, $sql); 
-		$uid = mysqli_insert_id($db_conx);
-		// Establish their row in the useroptions table
-		$sql = "INSERT INTO useroptions (id, username, background) VALUES ('$uid','$u','original')";
-		$query = mysqli_query($db_conx, $sql);
-		// Create directory(folder) to hold each user's files(pics, MP3s, etc.)
-		if (!file_exists("user/$u")) {
-			mkdir("user/$u", 0755);
-		}
+
 		// Email the user their activation link
 		$to = "$e";							 
 		$from = "auto_responder@yoursitename.com";
@@ -123,8 +197,6 @@ if(isset($_POST["u"])){
 */
 
 ?>
-
-
 
 <!DOCTYPE HTML>
 <html>
@@ -183,7 +255,8 @@ if(isset($_POST["u"])){
             </select>
             <div>Country:</div>
             <select id="country" onfocus="delElem('status')">
-            <?php include_once("template_country_list.php"); ?>
+            <option value="America">USA</option>
+            <option value="France">Paris</option>
             </select>
             <div>
             <a href="#" onclick="return false" onmousedown="openTerms()">

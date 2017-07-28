@@ -1,3 +1,3 @@
 git add -A
-git commit -m "[UPD] Signup form is coming together pretty well. I modularized some of the javascript code for the signup. now I need to add the insertion of the information into the database in PHP"
-git push origin master
+git commit -m "[UPD] Okay so the insertion of my users into the database works. now I just need to establish the rest of the info such as more countries, website et cetera, I also need to send an activation email."
+git push origin db/insertion
