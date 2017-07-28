@@ -166,10 +166,20 @@ if (isset($_POST["u"])) {
 	if (!file_exists("user/$u")) {
 		mkdir("user/$u", 0755);
 	}
+    // Email the user their activation link
+    $to = "$e";
+    $from = "your@mom.de";
+    $subject = 'camaguru Activation';
+	$message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>yoursitename Message</title></head><body style="margin:0px; font-family:Tahoma, Geneva, sans-serif;"><div style="padding:10px; background:#333; font-size:24px; color:#CCC;"><a href="http://www.yoursitename.com"><img src="http://www.yoursitename.com/images/logo.png" width="36" height="30" alt="yoursitename" style="border:none; float:left;"></a>yoursitename Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$u.',<br /><br />Click the link below to activate your account when ready:<br /><br /><a href="http://www.yoursitename.com/activation.php?id='.$uid.'&u='.$u.'&e='.$e.'&p='.$p_hash.'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* E-mail Address: <b>'.$e.'</b></div></body></html>';
+    $headers = "From: $from\n";
+    $headers .= "MIME-Version: 1.0\n";
+    $headers .= "Content-type: text/html; charset=iso-8859-1\n";
+    mail($to, $subject, $message, $headers);
+    echo "signup_success";
+    exit();
 }
 
 /*
-
 // Ajax calls this REGISTRATION code to execute
 if(isset($_POST["u"])){
 
@@ -178,22 +188,7 @@ if(isset($_POST["u"])){
 		$cryptpass = crypt($p);
 		include_once ("php_includes/randStrGen.php");
 		$p_hash = randStrGen(20)."$cryptpass".randStrGen(20);
-
-		// Email the user their activation link
-		$to = "$e";							 
-		$from = "auto_responder@yoursitename.com";
-		$subject = 'yoursitename Account Activation';
-		$message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>yoursitename Message</title></head><body style="margin:0px; font-family:Tahoma, Geneva, sans-serif;"><div style="padding:10px; background:#333; font-size:24px; color:#CCC;"><a href="http://www.yoursitename.com"><img src="http://www.yoursitename.com/images/logo.png" width="36" height="30" alt="yoursitename" style="border:none; float:left;"></a>yoursitename Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$u.',<br /><br />Click the link below to activate your account when ready:<br /><br /><a href="http://www.yoursitename.com/activation.php?id='.$uid.'&u='.$u.'&e='.$e.'&p='.$p_hash.'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* E-mail Address: <b>'.$e.'</b></div></body></html>';
-		$headers = "From: $from\n";
-        $headers .= "MIME-Version: 1.0\n";
-        $headers .= "Content-type: text/html; charset=iso-8859-1\n";
-		mail($to, $subject, $message, $headers);
-		echo "signup_success";
-		exit();
-	}
-	exit();
 }
-
 */
 
 ?>
