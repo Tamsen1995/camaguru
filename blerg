@@ -1,3 +1,3 @@
 git add -A
-git commit -m "[ADD] Adding the email activation part. I'm not sure it works because I haven't fully figured out the header functions yet. Also I still need to encrypt my password before sending it to the db"
+git commit -m "[ADD] IMPLEMENTED THE ACTIVATION EMAIL NOW I JUST NEED TO LINK THE USER TO THE APPROPIATE SITE"
 git push origin email/activation
