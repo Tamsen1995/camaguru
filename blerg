@@ -5,4 +5,4 @@ get those to work with the activation. And then I need to implement the login et
 the signup page doesn't change at all which is a problem. I've made a js script so that the page would
 scroll back up to the top but that doesn't seem to properly work for some reason. Needs FIXING!"
 
-git push origin email/activation
+git push origin signup/windowscroll
