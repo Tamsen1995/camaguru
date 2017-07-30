@@ -3,4 +3,4 @@ git add -A
 git commit -m "[UPD] The activation works just fine now. But I need to figure out how to hash the passwords and
 get those to work with the activation. And then I need to implement the login et cetera. "
 
-git push origin signup/windowscroll
+git push origin develop
