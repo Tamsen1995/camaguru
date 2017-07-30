@@ -6,6 +6,6 @@ function ajaxObj( meth, url ) {
 }
 function ajaxReturn(x){
 	if(x.readyState == 4 && x.status == 200){
-	    return true;	
+	    return true;
 	}
 }
