@@ -1,6 +1,6 @@
 <?php
     // here we compose the email which is supposed to be sent to the user
-    $message = "";
+    $message = "No message";
     $msg = preg_replace('#[^a-z 0-9.:_()]#i', '', $_GET['msg']);
     if ($msg == 'activation_failure') {
     	$message = '<h2>Activation Error</h2> Sorry there seems to have been an issue activating your account at this time. We have already notified ourselves of this issue and we will contact you via email when we have identified the issue.';
@@ -9,9 +9,11 @@
     } else {
         $message = $msg;
     }
-/*
-<div><?php echo $message; ?></div> // not entirely sure where to put this
-*/
+
+
 
 ?>
+
+<div><?php echo $message; ?></div> 
+
 
