@@ -33,13 +33,6 @@
     #pageTop > #pageTopWrap > #pageTopRest > #menu1 > div > a:hover {
         color: #834B4B;
     }
-    #pageTop > #pageTopWrap > #pageTopRest > #menu2 > div > a {
-        color: #CCC;
-        border: #834B4B dashed;
-        margin: 0px 130px;
-        float: right;
-    }    
-
     #pageMiddle {
         background-color: #CCC;
         width: 1000px;

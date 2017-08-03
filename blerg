@@ -1,6 +1,5 @@
 git add -A
 
-git commit -m "[UPD] The activation works just fine now. But I need to figure out how to hash the passwords and
-get those to work with the activation. And then I need to implement the login et cetera. "
+git commit -m "[UPD] implemented plenty of code for the login and user validation, need to test everything though ! "
 
 git push origin login

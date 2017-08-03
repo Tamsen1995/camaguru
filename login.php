@@ -1,18 +1,11 @@
-
-
-
-
-
 <?php
-    include_once("php_includes/check_login_status,php");
+    include_once("php_includes/check_login_status.php");
     // If user is already logged in, header that dudersduds away
     if ($user_ok == true) {
         header("location: user.php?u=".$_SESSION["username"]);
         exit();
     }
 ?>
-
-
 
 <?php
     // AJAX calls this login code to execute
@@ -85,86 +78,52 @@
         </style>
         <script src="javascript/main.js"></script>
         <script src="javascript/ajax.js"></script>
-
-    </head>
-</html>
-
-<?php 
-    // implement the rest later! 
-
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Log In</title>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="stylesheet" href="style/style.css">
-<style type="text/css">
-#loginform{
-	margin-top:24px;	
-}
-#loginform > div {
-	margin-top: 12px;	
-}
-#loginform > input {
-	width: 200px;
-	padding: 3px;
-	background: #F3F9DD;
-}
-#loginbtn {
-	font-size:15px;
-	padding: 10px;
-}
-</style>
-<script src="js/main.js"></script>
-<script src="js/ajax.js"></script>
-<script>
-function emptyElement(x){
-	_(x).innerHTML = "";
-}
-function login(){
-	var e = _("email").value;
-	var p = _("password").value;
-	if(e == "" || p == ""){
-		_("status").innerHTML = "Fill out all of the form data";
-	} else {
-		_("loginbtn").style.display = "none";
-		_("status").innerHTML = 'please wait ...';
-		var ajax = ajaxObj("POST", "login.php");
-        ajax.onreadystatechange = function() {
-	        if(ajaxReturn(ajax) == true) {
-	            if(ajax.responseText == "login_failed"){
-					_("status").innerHTML = "Login unsuccessful, please try again.";
-					_("loginbtn").style.display = "block";
-				} else {
-					window.location = "user.php?u="+ajax.responseText;
-				}
-	        }
+        <script>
+        function emptyElement(x) {
+            _(x).innerHTML = "";
         }
-        ajax.send("e="+e+"&p="+p);
-	}
-}
-</script>
-</head>
-<body>
-<?php include_once("template_pageTop.php"); ?>
-<div id="pageMiddle">
-  <h3>Log In Here</h3>
-  <!-- LOGIN FORM -->
-  <form id="loginform" onsubmit="return false;">
-    <div>Email Address:</div>
-    <input type="text" id="email" onfocus="emptyElement('status')" maxlength="88">
-    <div>Password:</div>
-    <input type="password" id="password" onfocus="emptyElement('status')" maxlength="100">
-    <br /><br />
-    <button id="loginbtn" onclick="login()">Log In</button> 
-    <p id="status"></p>
-    <a href="#">Forgot Your Password?</a>
-  </form>
-  <!-- LOGIN FORM -->
-</div>
-<?php include_once("template_pageBottom.php"); ?>
-</body>
+        function login() {
+            var e = _("email").value; // Just like in the signup function we get all the posted variables into local variables
+            var p = _("password").value;
+            if (e == "" || p == "") {
+                _("status").innerHTML = "Please fill out the form data";
+            } else {
+                _("loginbtn").style.display = "none";
+                _("status").innerHTML = "please wait ...";
+                var ajax = ajaxObj("POST", "login.php");
+                ajax.onreadystatechange = function() {
+                    if (ajaxReturn(ajax) == true) {
+                        if (ajax.responseText == "login_failed") {
+                            _("status").innerHTML = "Login unsuccessful, please try again.";
+                            _("loginbtn").style.display = "block";
+                        } else {
+                            window.location = "user.php?u="+ajax.responseText;
+                        }
+                    }
+                }
+                ajax.send("e="+e+"&p="+p);
+            }
+        }
+        </script>
+    </head>
+
+    <body>
+        <?php include_once("php_includes/table_top.php");?>
+        <div id ="pageMiddle">
+            <h3>Log In Here</h3>
+            <!-- LOGIN FORM -->
+            <form id="loginform" onsubmit="return false;">
+                <div>Email Address:</div>
+                <input type="text" id="email" onfocus="emptyElement('status')" maxlength="88">
+                <div>Password:</div>
+                <input type="password" id="password" onfocus="emptyElement('status')" maxlength="100">
+                <br /><br />
+                <button id="loginbtn" onclick="login()">Log In</button>
+                <p id="status"></p>
+                <a href="implement later">Forgot your Password?</a>
+            </form>
+            <!-- LOGIN FORM -->
+        </div>
+        <?php// include_once("template_pageBottom.php"); ?>
+    </body>
 </html>
