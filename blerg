@@ -1,5 +1,5 @@
 git add -A
 
-git commit -m "[UPD] Tested and fixed login "
+git commit -m "[ADD] Made a cron job, just need to add it onto hosting"
 
-git push origin login
+git push origin cron/jobs
