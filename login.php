@@ -14,7 +14,7 @@
         include_once("php_includes/db_conx.php");
         // gather the posted data into local vars and sanitize
         $e = mysqli_real_escape_string($db_conx, $_POST['e']);
-        $p = md5($_POST['p']); // If I md5 this then TODO md5 the one that is sent to the db as well TODO TODO
+        $p = $_POST['p']; // If I md5 this then TODO md5 the one that is sent to the db as well TODO TODO
         // get user ip address
         $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
         // Form fata error handling
@@ -25,6 +25,7 @@
             // end form data error handling
             $sql = "SELECT id, username, password FROM users WHERE email='$e' AND activated='1' LIMIT 1";
             $query = mysqli_query($db_conx, $sql);
+            $row = mysqli_fetch_row($query);
             $db_id = $row[1];
             $db_username = $row[1];
             $db_pass_str = $row[2];
@@ -124,6 +125,5 @@
             </form>
             <!-- LOGIN FORM -->
         </div>
-        <?php// include_once("template_pageBottom.php"); ?>
     </body>
 </html>

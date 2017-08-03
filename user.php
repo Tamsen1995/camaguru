@@ -56,7 +56,6 @@
         <script src="javascript/ajax.js"></script>
     </head>
     <body>
-        <?php include_once("template_pageTop.php");?>
         <div id="pageMiddle">
             <h3><?php echo $u;?></h3>
             <p>Is the viewer the page owner, logged in and verified? <b><?php echo $isOwner; ?></b></p>
@@ -66,6 +65,5 @@
             <p>Join Date: <?php echo $joindate; ?></p>
             <p>Last Session: <?php echo $lastsession; ?></p>
         </div>
-        <?php include_once("template_pageBottom.php"); ?>
     </body>
 </html>
