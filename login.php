@@ -121,7 +121,7 @@
                 <br /><br />
                 <button id="loginbtn" onclick="login()">Log In</button>
                 <p id="status"></p>
-                <a href="implement later">Forgot your Password?</a>
+                <a href="http://localhost/camaguru/forgot_pass.php">Forgot your Password?</a>
             </form>
             <!-- LOGIN FORM -->
         </div>
