@@ -1,59 +1,12 @@
-
-
-
-
-
-<?php 
-include_once("php_includes/check_login_status.php");
+<?php include_once("php_includes/check_login_status.php");
 // If user is already logged in, header that weenis away
 if($user_ok == true) {
     header("location: user.php?u=".$_SESSION["username"]);
     exit();
 }
 ?>
-
+<?php include_once("php_includes/generate_temp_pass.php");?>
 <?php
-// AJAX CALLS THIS CODE TO EXECUTE
-// This block of code generates a new temp password for the user
-// And then also generates and sends an email to the user
-if (isset($_POST["e"])) {
-    $e = mysqli_real_escape_string($db_conx, $_POST['e']);
-    $sql = "SELECT id, username FROM users WHERE email='$e' AND activated='1' LIMIT 1";
-    $query = mysqli_query($db_conx, $sql);
-    $numrows = mysqli_num_rows($query);
-    if ($numrows > 0) {
-        while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-            $id = $row["id"];
-            $u = $row["username"];
-        }
-        $emailcut = substr($e, 0, 4);
-        $randNum = rand(10000, 999999);
-        $tempPass = "$emailcut$randNum";
-        $hashTempPass = md5($tempPass);
-        $sql = "UPDATE useroptions SET temp_pass='$hashTempPass' WHERE username='$u' LIMIT 1";
-        $query = mysqli_query($db_conx, $sql);
-        $to = "$e";
-        $from = "auto_responder@camaguru.com";
-        $headers = "From: $from\n";
-        $headers .= "MIME-Version: 1.0\n";
-        $headers .= "Content-type: text/html; charset=iso-8859-1 \n";
-        $subject = "Camaguru temporary Password";
-		$msg = '<h2>Hello '.$u.'</h2><p>This is an automated message from the Tamaguru. If you did not recently initiate the Forgot Password process, please disregard this email.</p><p>You indicated that you forgot your login password. We can generate a temporary password for you to log in with, then once logged in you can change your password to anything you like.</p><p>After you click the link below your password to login will be:<br /><b>'.$tempPass.'</b></p><p><a href="http://www.yoursite.com/forgot_pass.php?u='.$u.'&p='.$hashTempPass.'">Click here now to apply the temporary password shown below to your account</a></p><p>If you do not click the link in this email, no changes will be made to your account. In order to set your login password to the temporary password you must click the link above.</p>';
-        if (mail($to, $subject, $msg, $headers)) {
-            echo "success";
-            exit();
-        } else {
-            echo "email_send_failed";
-            exit ();
-        }
-    } else {
-        echo "no_exist";
-    }
-    exit();
-}
-?>
-
-<?php 
 // EMAIL LINK CLICK CALLS THIS CODE TO EXECUTE
 // This block of code changes the password in the db once the link in the email has been clicked
 if (isset($_GET['u']) && isset($_GET['p'])) {
@@ -80,15 +33,13 @@ if (isset($_GET['u']) && isset($_GET['p'])) {
     }
 }
 ?>
-
 <!DOCTYPE html>
-
 <html>
     <head>
     <meta charset="UTF-8">
     <title>Forgot Password</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style.css">
     <style type="text/css">
     #forgotpassform {
         margin-top:24px;
@@ -107,7 +58,7 @@ if (isset($_GET['u']) && isset($_GET['p'])) {
     }
     </style>
     <script src="javascript/main.js"></script>
-    <script src"javascript/ajax.js"></script>
+    <script src="javascript/ajax.js"></script>
     <script>
         function forgotpass(){
             var e = _("email").value;
@@ -120,7 +71,7 @@ if (isset($_GET['u']) && isset($_GET['p'])) {
                 ajax.onreadystatechange = function() {
                     if(ajaxReturn(ajax) == true) {
                         var response = ajax.responseText;
-                        if(response == "success"){
+                        if(response == "\nsuccess"){
                             _("forgotpassform").innerHTML = '<h3>Step 2. Check your email inbox in a few minutes</h3><p>You can close this window or tab if you like.</p>';
                         } else if (response == "no_exist"){
                             _("status").innerHTML = "Sorry that email address is not in our system";
@@ -148,6 +99,6 @@ if (isset($_GET['u']) && isset($_GET['p'])) {
             <p id="status"></p>
         </form>
     </div>
-    <?php include_once("template_pageBottom.php"); ?>
+    <?php // TODO make a page bottom ?>
     </body>
-</html
+</html>
